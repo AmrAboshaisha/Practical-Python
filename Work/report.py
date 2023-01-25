@@ -61,3 +61,36 @@ total_cost = portfolio_cost(filename)
 
 print('Current Value', current_value)
 print('Gain', current_value - total_cost)
+
+
+portfolio = read_portfolio(filename)
+prices = read_prices('Data/prices.csv')
+
+def make_report(protfolio, prices):
+    ''' takes a list of stocks and dictionary of prices as input 
+    and returns a list of tuples Name, Shares, Price, Change'''
+    table = []
+    #calculate chage for each stock
+    for stock in portfolio:
+        if stock['name'] in prices:
+            change = prices[stock['name']] - stock['price']
+        else:
+            change = 0
+        record = (stock['name'], stock['shares'], stock['price'], change)
+        table.append(record)
+    return table
+
+#pprint(make_report(portfolio, prices))
+
+headers = ('Name', 'Shares', 'Price', 'Change')
+print('%10s %10s %10s %10s' %headers)
+print(('_' * 10 + ' ')*len(headers))
+report = make_report(portfolio, prices)
+for record in report:
+    print('%10s %10d %10.2f %10.2f' % record)
+
+
+#for name, shares, price, change in report:
+    #print(f'{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}')
+
+

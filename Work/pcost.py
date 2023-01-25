@@ -1,14 +1,19 @@
 # pcost.py
 #
 # Exercise 1.27
-total = 0
-with open('Data/portfolio.csv', 'rt') as f:
-    headers = next(f) #skip the header
+# Exercise 1.30 : Turn code of 1.27 into a funcion
+def portfolio_cost(filename):
+    total = 0
+    with open(filename, 'rt') as f:
+        headers = next(f) #skip the header
+        
+        for line in f:
+            stock = line.split(',')
+            nshares = int(stock[1])
+            price = float(stock[2])
+            total += (nshares * price)
     
-    for line in f:
-        stock = line.split(',')
-        nshares = int(stock[1])
-        price = float(stock[2])
-        total += (nshares * price)
+    return total
 
+total = portfolio_cost('Data/portfolio.csv')
 print(f'Total Cost {total}')

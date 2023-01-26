@@ -13,8 +13,12 @@ def read_portfolio(filename):
         rows = csv.reader(f)
         headers = next(rows)
         for row in rows:
-            holding = {'name':row[0],'shares':int(row[1]),
-            'price':float(row[2])}
+            record = dict(zip(headers, row))
+            holding = {
+            'name':record['name'],
+            'shares':int(record['shares']),
+            'price':float(record['price'])
+            }
             portfolio.append(holding)
 
     return portfolio
@@ -30,12 +34,9 @@ def read_prices(filename):
             try:
                 prices[row[0]] = float(row[1])
             except IndexError:
-                #print('Could not process', row)
                 pass
     return prices
 
-prices = read_prices('Data/prices.csv')
-#pprint(prices)
 
 # Calculate total cost of portfolio
 def portfolio_cost(filename):
@@ -55,7 +56,10 @@ def portfolio_value(filename):
         total += s['shares'] * prices[s['name']]
     return total
 
-filename = 'Data/portfolio.csv'
+#filename = 'Data/portfolio.csv'
+filename = 'Data/portfoliodate.csv'
+portfolio = read_portfolio(filename)
+prices = read_prices('Data/prices.csv')
 current_value = portfolio_value(filename)
 total_cost = portfolio_cost(filename)
 
@@ -63,8 +67,6 @@ print('Current Value', current_value)
 print('Gain', current_value - total_cost)
 
 
-portfolio = read_portfolio(filename)
-prices = read_prices('Data/prices.csv')
 
 def make_report(protfolio, prices):
     ''' takes a list of stocks and dictionary of prices as input 
@@ -72,15 +74,15 @@ def make_report(protfolio, prices):
     table = []
     #calculate chage for each stock
     for stock in portfolio:
+        current_price = prices[stock['name']]
         if stock['name'] in prices:
-            change = prices[stock['name']] - stock['price']
+            change = current_price - stock['price']
         else:
             change = 0
-        record = (stock['name'], stock['shares'], stock['price'], change)
+        record = (stock['name'], stock['shares'], current_price, change)
         table.append(record)
     return table
 
-#pprint(make_report(portfolio, prices))
 
 headers = ('Name', 'Shares', 'Price', 'Change')
 print('%10s %10s %10s %10s' %headers)

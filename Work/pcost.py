@@ -5,28 +5,21 @@
 #Exercise 1.32 to use csv lib 
 import sys
 import csv
+import report
+
 def portfolio_cost(filename):
-    total = 0
-    with open(filename) as f:
-        rows = csv.reader(f)
-        headers = next(rows) #skip the header
+    '''Computes total cost (shares * price) of a portfolio'''
+    portfolio = report.read_portfolio(filename)
+    return sum([ stock['shares']*stock['price'] for stock in portfolio])
 
-        for rowno, row in enumerate(rows):
-            record = dict(zip(headers, row))
-            try:
-                nshares = int(record['shares'])
-                price = float(record['price'])
-                total += (nshares * price)
-            except ValueError:
-                print(f'Row {rowno}: Bad row {row}')
 
-    return total
+def main(argv):
+    if len(argv) != 2:
+        raise SystemExit('Usage: %s potfoliofile' %argv[0])
+    filename = argv[1]
+    print(f'Total Cost: {portfolio_cost(filename)}')
 
-if len(sys.argv) == 2:
-    filename = sys.argv[1]
-else:
-    raise RuntimeError("Missing Filename")
-
-total = portfolio_cost(filename)
-print(f'Total Cost {total}')
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)
 

@@ -74,11 +74,16 @@ def portfolio_report(portfolio_filename, prices_filename):
     print_report(report)
 
 
-portfolio_report('Data/portfolio2.csv', 'Data/prices.csv')
+def main(argv):
+    ''' 
+    Accepts a list of command line options to produce the output.
+    Example use:
+    >>> report.main(['report.py', 'Data/portfolio.csv', 'Data/prices.csv'])
+    '''
+    if len(argv) != 3:
+        raise SystemExit('Usage: %s portfile pricefile' %argv[0])
+    portfolio_report(argv[1], argv[2])
 
-
-files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
-for name in files:
-    print(f'{name:-^43s}')
-    portfolio_report(name, 'Data/prices.csv')
-    print()
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)

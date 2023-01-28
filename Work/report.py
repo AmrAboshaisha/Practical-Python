@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # report.py
 #
 # Exercise 2.4

@@ -4,8 +4,12 @@
 
 import csv
 
-def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','):
+def parse_csv(filename, select=None, types=None, 
+            has_headers=True, delimiter=',', silence_errors=True):
     '''Parse a CSV file into a list of records'''
+    if select and not has_headers:
+        raise RuntimeError("select argument requires column headers")
+    
     with open(filename) as f:
         rows = csv.reader(f, delimiter=delimiter)
 
@@ -22,7 +26,7 @@ def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','
 
         records = []
 
-        for row in rows:
+        for numrow, row in enumerate(rows, 1):
             if not row: #skip rows with no data
                 continue
                 
@@ -32,8 +36,14 @@ def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','
             
             # apply type conversion to row if provided
             if types:
-                row = [f(entry) for f,entry in zip(types, row)]
-
+                try:
+                    row = [f(entry) for f,entry in zip(types, row)]
+                except ValueError as e:
+                    if not silence_errors:
+                        print(f'Row {numrow}: Couldn\'t convert {row}')
+                        print(f'Row {numrow}: Reason {e}')
+                    continue
+            
             # Make dict or tuple 
             if has_headers: 
                 record = dict(zip(headers, row))

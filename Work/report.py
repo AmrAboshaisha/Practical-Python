@@ -38,8 +38,8 @@ def read_prices(filename):
     return prices
 
 
-# Calculate total cost of portfolio
 def portfolio_cost(filename):
+    '''Calculate total cost of portfolio'''
     portfolio = read_portfolio(filename)
     total = 0.0
     for s in portfolio:
@@ -73,6 +73,7 @@ def make_report(portfolio, prices):
     return table
 
 def print_report(report):
+    '''Prints a nicely formatted table'''
     headers = ('Name', 'Shares', 'Price', 'Change')
     print('%10s %10s %10s %10s' %headers)
     print(('_' * 10 + ' ')*len(headers))

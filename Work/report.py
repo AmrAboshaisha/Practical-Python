@@ -3,39 +3,18 @@
 # Exercise 2.4
 import csv
 from pprint import pprint
+from fileparse import parse_csv
 
 def read_portfolio(filename):
     '''Reads a portfolio csv file of Stock, Num Shares, Price 
     into a list of dictionaries'''
-    portfolio = []
-
-    with open(filename, 'rt') as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-        for row in rows:
-            record = dict(zip(headers, row))
-            holding = {
-            'name':record['name'],
-            'shares':int(record['shares']),
-            'price':float(record['price'])
-            }
-            portfolio.append(holding)
-
-    return portfolio
+    return parse_csv(filename,select=['name','shares','price'], types=[str,int,float] )
 
 
 def read_prices(filename):
     ''' Reads a set of prices into a dictionary where keys are
     the stock names and values are the stock prices'''
-    prices = {}
-    with open(filename, 'r') as f:
-        rows = csv.reader(f)
-        for row in rows:
-            try:
-                prices[row[0]] = float(row[1])
-            except IndexError:
-                pass
-    return prices
+    return dict(parse_csv(filename, has_headers=False, types=[str,float]))
 
 
 def portfolio_cost(filename):

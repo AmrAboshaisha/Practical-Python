@@ -6,16 +6,23 @@ import csv
 from pprint import pprint
 from fileparse import parse_csv
 
+def file2iter(filename):
+    lines = []
+    with open(filename) as f:
+        for line in f:
+            lines.append(line)
+    return lines
+
 def read_portfolio(filename):
     '''Reads a portfolio csv file of Stock, Num Shares, Price 
     into a list of dictionaries'''
-    return parse_csv(filename,select=['name','shares','price'], types=[str,int,float] )
+    return parse_csv(file2iter(filename),select=['name','shares','price'], types=[str,int,float] )
 
 
 def read_prices(filename):
     ''' Reads a set of prices into a dictionary where keys are
     the stock names and values are the stock prices'''
-    return dict(parse_csv(filename, has_headers=False, types=[str,float]))
+    return dict(parse_csv(file2iter(filename), has_headers=False, types=[str,float]))
 
 
 def portfolio_cost(filename):

@@ -10,9 +10,9 @@ import csv
 import report
 
 def portfolio_cost(filename):
-    '''Computes total cost (shares * price) of a portfolio'''
+    '''Calculate total cost of portfolio'''
     portfolio = report.read_portfolio(filename)
-    return sum([ stock['shares']*stock['price'] for stock in portfolio])
+    return sum([ s.cost() for s in portfolio])
 
 
 def main(argv):

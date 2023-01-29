@@ -5,6 +5,7 @@
 import csv
 from pprint import pprint
 from fileparse import parse_csv
+import stock
 
 def file2iter(filename):
     lines = []
@@ -15,8 +16,9 @@ def file2iter(filename):
 
 def read_portfolio(filename):
     '''Reads a portfolio csv file of Stock, Num Shares, Price 
-    into a list of dictionaries'''
-    return parse_csv(file2iter(filename),select=['name','shares','price'], types=[str,int,float] )
+    into a list of stock objects'''
+    portdicts = parse_csv(file2iter(filename),select=['name','shares','price'], types=[str,int,float] )
+    return [ stock.Stock(d['name'], d['shares'], d['price']) for d in portdicts ]
 
 
 def read_prices(filename):
@@ -25,37 +27,18 @@ def read_prices(filename):
     return dict(parse_csv(file2iter(filename), has_headers=False, types=[str,float]))
 
 
-def portfolio_cost(filename):
-    '''Calculate total cost of portfolio'''
-    portfolio = read_portfolio(filename)
-    total = 0.0
-    for s in portfolio:
-        total += s['shares']*s['price']
-    return total
-
-
-
-# Compute current value
-def portfolio_value(filename):
-    portfolio = read_portfolio(filename)
-    total = 0.0
-    for s in portfolio:
-        total += s['shares'] * prices[s['name']]
-    return total
-
-
 def make_report(portfolio, prices):
     ''' takes a list of stocks and dictionary of prices as input 
     and returns a list of tuples Name, Shares, Price, Change'''
     table = []
     #calculate chage for each stock
     for stock in portfolio:
-        current_price = prices[stock['name']]
-        if stock['name'] in prices:
-            change = current_price - stock['price']
+        current_price = prices[stock.name]
+        if stock.name in prices:
+            change = current_price - stock.price
         else:
             change = 0
-        record = (stock['name'], stock['shares'], current_price, change)
+        record = (stock.name, stock.shares, current_price, change)
         table.append(record)
     return table
 

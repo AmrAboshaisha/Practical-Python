@@ -82,3 +82,19 @@ def create_formatter(name):
         raise RuntimeError(f'Unknown format {name}')
     return formatter
 
+def print_table(table,columns,formatter):
+    '''
+    print_table() that prints a table showing user-specified attributes of 
+    a list of arbitrary objects. 
+    print_table() should also accept a TableFormatter instance to control 
+    the output format.
+
+    table : list of stock objects
+    columns : list of columns user wants to print
+    formatter : a formatter object to print the output
+
+    '''
+    formatter.headings(columns)
+    for stock in table:
+        rowdata = [ str(getattr(stock, colname)) for colname in columns]
+        formatter.row(rowdata)

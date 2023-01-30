@@ -7,6 +7,7 @@ from pprint import pprint
 from fileparse import parse_csv
 import stock
 import tableformat
+from portfolio import Portfolio
 
 def file2iter(filename):
     lines = []
@@ -19,8 +20,8 @@ def read_portfolio(filename):
     '''Reads a portfolio csv file of Stock, Num Shares, Price 
     into a list of stock objects'''
     portdicts = parse_csv(file2iter(filename),select=['name','shares','price'], types=[str,int,float] )
-    return [ stock.Stock(d['name'], d['shares'], d['price']) for d in portdicts ]
-
+    portfolio = [ stock.Stock(d['name'], d['shares'], d['price']) for d in portdicts ]
+    return Portfolio(portfolio)
 
 def read_prices(filename):
     ''' Reads a set of prices into a dictionary where keys are

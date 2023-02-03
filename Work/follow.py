@@ -14,6 +14,10 @@ def follow(filename):
             else:
                 time.sleep(0.1) #sleep breifly
 
+def filematch(lines, substr):
+    for line in lines:
+        if substr in line:
+            yield line
 
 if __name__ == '__main__':
     import report

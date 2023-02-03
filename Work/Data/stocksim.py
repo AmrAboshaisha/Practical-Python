@@ -13,7 +13,7 @@
 import math
 import time
 
-history_file = "dowstocks.csv"
+history_file = "Data/dowstocks.csv"
 
 # Convert a time string such as "4:00pm" to minutes past midnight
 def minutes(tm):

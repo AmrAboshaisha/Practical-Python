@@ -16,11 +16,14 @@ def file2iter(filename):
             lines.append(line)
     return lines
 
-def read_portfolio(filename):
+def read_portfolio(filename, **opts):
     '''Reads a portfolio csv file of Stock, Num Shares, Price 
     into a list of stock objects'''
-    portdicts = parse_csv(file2iter(filename),select=['name','shares','price'], types=[str,int,float] )
-    portfolio = [ stock.Stock(d['name'], d['shares'], d['price']) for d in portdicts ]
+    portdicts = parse_csv(file2iter(filename),
+                select=['name','shares','price'], 
+                types=[str,int,float], **opts)
+    
+    portfolio = [ stock.Stock(**d) for d in portdicts ]
     return Portfolio(portfolio)
 
 def read_prices(filename):

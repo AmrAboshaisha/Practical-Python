@@ -18,9 +18,12 @@ def make_dicts(rows, headers):
         yield dict(zip(headers, row))
 
 def filter_symbols(rows, names):
+    '''
     for row in rows:
         if row['name'] in names:
             yield row
+    '''
+    return (row for row in rows if row['name'] in names)
 
 def parse_stock_data(lines):
     rows = csv.reader(lines)
